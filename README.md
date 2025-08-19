@@ -26,3 +26,7 @@ ssh root@<host> -p 2222
 ```
 
 默认密码为 `Lmop192!`
+
+# TODO
+
+- 使用环境变量设置 ssh 密码
