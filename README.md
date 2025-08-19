@@ -1,5 +1,5 @@
 # javadev
-使用 docker 搭建 java 开发环境，环境 CentOS8，包括：
+用 docker 搭建 java 开发环境，使用 CentOS8，包括：
 
 - yum 源配置为阿里云 http://mirrors.aliyun.com/repo/Centos-8.repo
 - mvn 镜像源设置为阿里云 https://maven.aliyun.com/repository/public
