@@ -30,3 +30,4 @@ ssh root@<host> -p 2222
 # TODO
 
 - [ ] 使用环境变量设置 ssh 密码
+- [ ] 启动后增加 ssh 连接提示
