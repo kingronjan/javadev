@@ -11,7 +11,7 @@ RUN yum install -y java-11-openjdk-devel
 RUN yum install -y maven
 
 RUN mkdir -p /etc/maven
-RUN <<EOF > /etc/maven/settings.xml
+RUN cat <<EOF > /etc/maven/settings.xml
 <?xml version="1.0" encoding="UTF-8"?>
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
