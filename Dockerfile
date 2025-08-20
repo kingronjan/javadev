@@ -3,9 +3,9 @@ FROM hub.rat.dev/centos:8
 WORKDIR /etc/yum.repos.d/
 RUN mkdir backup && mv *repo backup/
 RUN curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-8.repo
-RUN sed -i -e"s|mirrors.cloud.aliyuncs.com|mirrors.aliyun.com|g " /etc/yum.repos.d/CentOS-*
-RUN sed -i -e "s|releasever|releasever-stream|g" /etc/yum.repos.d/CentOS-*
-RUN yum clean all && yum makecache
+RUN sed -i -e"s|mirrors.cloud.aliyuncs.com|mirrors.aliyun.com|g " /etc/yum.repos.d/CentOS-* && \
+    sed -i -e "s|releasever|releasever-stream|g" /etc/yum.repos.d/CentOS-* && \
+    yum clean all && yum makecache
 
 RUN yum install -y java-11-openjdk-devel
 RUN yum install -y maven
@@ -42,8 +42,26 @@ RUN yum install -y openssh-server openssh-clients
 RUN ssh-keygen -t rsa -P "" -f /etc/ssh/ssh_host_rsa_key
 
 RUN mkdir -p /var/run/sshd
-RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
-    sed -i 's/UsePAM yes/UsePAM no/' /etc/ssh/sshd_config # 禁用 PAM，因为在容器中可能不适用
-RUN echo 'root:Lmop192!' | chpasswd
+RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
-CMD ["/usr/sbin/sshd", "-D"]
+ENV SSH_PASSWORD Lmop192!
+
+RUN cat <<\EOF > /start.sh
+#/bin/bash
+
+echo "Setting ssh password"
+echo "root:$SSH_PASSWORD" | chpasswd
+
+# To avoid the warning message "System is booting up. Unprivileged users are not permitted to log in yet"
+echo "Rmoving nologin file"
+rm -f /run/nologin
+
+echo "Starting SSH service"
+/usr/sbin/sshd -D
+EOF
+
+RUN chmod +x /start.sh
+
+WORKDIR /app
+
+CMD ["/bin/sh", "-c", "/start.sh"]
