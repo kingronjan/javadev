@@ -19,6 +19,12 @@ docker build -t jdk11-dev .
 docker run -d -v "$(pwd):/app" -p 2222:22 jdk11-dev
 ```
 
+可以使用 `SSH_PASSWORD` 指定 ssh 登录密码，如指定密码为 123：
+```shell
+docker run -d -e SSH_PASSWORD=123 -v "$(pwd):/app" -p 2222:22 jdk11-dev
+```
+
+
 启动后，可以通过 vscode/idea 远程开发，使用 ssh 连接容器即可
 
 ```shell
@@ -29,5 +35,5 @@ ssh root@<host> -p 2222
 
 # TODO
 
-- [ ] 使用环境变量设置 ssh 密码
+- [x] 使用环境变量设置 ssh 密码
 - [ ] 启动后增加 ssh 连接提示
